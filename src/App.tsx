@@ -1,45 +1,49 @@
 // src/App.tsx
-import UserCard from "./components/UserCard";
-import CourseCard from "./components/CourseCard";
-import SubmissionBadge from "./components/SubmissionBadge";
-import type { User, Course, Submission } from "./types/index";
+import CustomerCard from "./components/CustomerCard";
+import ProductCard from "./components/ProductCard";
+import OrderBadge from "./components/OrderBadge";
+import type { Customer, Product, PreOrder } from "./types/index";
 import "./App.css";
 
-const student: User = {
+
+const customer: Customer = {
   id: 1,
   name: "Juan dela Cruz",
   email: "juan@example.com",
-  role: "student",
+  role: "customer",
   isActive: true,
-  score: 95.5,
+  points: 95.5,
 };
 
-const course: Course = {
-  name: "IT Elective 4",
-  units: 3,
-  semester: "1st Semester 2026-2027",
+const product: Product = {
+  name: "Iced Coffee",
+  price: 120,
+  category: "Beverage",
 };
 
-const submission: Submission = {
+const preOrder: PreOrder = {
   id: 1,
-  studentId: 1,
-  courseName: "IT Elective 4",
-  grade: "A",
-  submittedAt: new Date(),
+  customerId: 1,
+  productName: "Iced Coffee",
+  status: "Preparing",
+  orderedAt: new Date(),
 };
 
 function App() {
   return (
-    <div className="app">
-      <UserCard
-        user={student}
-        onSelect={(u) => console.log(u)}
-      />
-      <CourseCard course={course} />
-      <SubmissionBadge submission={submission}>
-        <p>On time!</p>
-      </SubmissionBadge>
-    </div>
+    <>
+      <header className="app-header">
+        <h1>Pre-Order Platform</h1>
+        <p>ITELECT4 — GT2 Part 1 · React + TypeScript Components</p>
+      </header>
+      <div className="app">
+        <CustomerCard customer={customer} onSelect={(c) => console.log(c)} />
+        <ProductCard product={product} />
+        <OrderBadge order={preOrder}>
+          <p>Ready for pickup!</p>
+        </OrderBadge>
+      </div>
+    </>
   );
 }
 
