@@ -1,4 +1,4 @@
-// src/components/ProductCard.tsx -- now with a variant prop
+// src/components/ProductCard.tsx
 import type { Product } from "../types/index";
 
 interface ProductCardProps {
@@ -11,12 +11,14 @@ function ProductCard({ product, variant = "default" }: ProductCardProps) {
 
   return (
     <div
-      className={`rounded-lg border border-gray-200 bg-white shadow-sm
-      dark:bg-gray-800 dark:border-gray-700 ${isCompact ? "p-3" : "p-5"}`}
+      className={`rounded-lg border border-gray-200 bg-white shadow-sm dark:bg-gray-800 dark:border-gray-700 ${
+        isCompact ? "p-3" : "p-5"
+      }`}
     >
       <h3
-        className={`font-bold text-gray-900 dark:text-white
-        ${isCompact ? "text-sm" : "text-lg"}`}
+        className={`font-bold text-gray-900 dark:text-white ${
+          isCompact ? "text-sm" : "text-lg"
+        }`}
       >
         {product.name}
       </h3>
