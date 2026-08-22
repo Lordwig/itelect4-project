@@ -1,37 +1,26 @@
 // src/pages/ProductsPage.tsx
-import { useState, useEffect, useRef } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
-import type { Product } from "../types/index";
+import type { ApiProduct } from "../types/index";
 import ProductCard from "../components/ProductCard";
 import usePrevious from "../hooks/usePrevious";
-import { allProducts } from "../data/mockData";
+import useUiStore from "../store/uiStore";
+import { fetchProducts } from "../api/client";
+// useState, useEffect, useRef and mockData imports are GONE
 
 function ProductsPage() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isError, setIsError] = useState<boolean>(false);
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const searchInputRef = useRef<HTMLInputElement>(null);
+  // These four lines replace all of GT2's fetching state
+  const { data, isPending, isError, error } = useQuery<ApiProduct[]>({
+    queryKey: ["products"],
+    queryFn: fetchProducts,
+  });
+
+  // The search box now reads and writes the store, not local state
+  const searchTerm = useUiStore((state) => state.searchTerm);
+  const setSearchTerm = useUiStore((state) => state.setSearchTerm);
   const previousSearch = usePrevious(searchTerm);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setProducts(allProducts);
-      setIsLoading(false);
-    }, 500);
-  }, []);
-
-  const handleSearchChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ): void => setSearchTerm(e.target.value);
-
-  const filteredProducts = products.filter(
-    (p) =>
-      p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.category.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  if (isLoading) {
+  if (isPending) {
     return (
       <div className="animate-pulse p-6 text-gray-500">
         Loading products...
@@ -42,26 +31,26 @@ function ProductsPage() {
   if (isError) {
     return (
       <div className="rounded-lg bg-red-50 p-4 text-red-700">
-        Could not load products.
+        {error.message} -- is json-server running on port 3001?
       </div>
     );
   }
+
+  // Below this line data is ApiProduct[], never undefined
+  const filteredProducts = data.filter(
+    (p) =>
+      p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      p.category.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div>
       <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">
         Products
       </h2>
-      <button
-        onClick={() => setIsError(true)}
-        className="mb-2 rounded bg-red-100 px-2 py-1 text-xs text-red-700"
-      >
-        Simulate Error
-      </button>
       <input
-        ref={searchInputRef}
         value={searchTerm}
-        onChange={handleSearchChange}
+        onChange={(e) => setSearchTerm(e.target.value)}
         placeholder="Search products..."
         className="w-full max-w-sm rounded border border-gray-300 p-2 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
       />
@@ -72,7 +61,7 @@ function ProductsPage() {
       )}
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {filteredProducts.map((p) => (
-          <Link key={p.name} to={`/products/${encodeURIComponent(p.name)}`}>
+          <Link key={p.id} to={`/products/${encodeURIComponent(p.name)}`}>
             <ProductCard product={p} />
           </Link>
         ))}
