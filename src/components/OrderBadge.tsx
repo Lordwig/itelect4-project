@@ -1,8 +1,8 @@
 // src/components/OrderBadge.tsx
-import type { PreOrder } from "../types/index";
+import type { ApiPreOrder } from "../types/index"; // was PreOrder
 
 interface OrderBadgeProps {
-  order: PreOrder;
+  order: ApiPreOrder; // was PreOrder
   children?: React.ReactNode;
 }
 

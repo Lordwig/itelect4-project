@@ -1,22 +1,37 @@
 // src/pages/ProductDetailPage.tsx
+import { useQuery } from "@tanstack/react-query";
 import { useParams, useNavigate } from "react-router";
+import type { ApiProduct } from "../types/index";
 import ProductCard from "../components/ProductCard";
-import { allProducts } from "../data/mockData";
+import { fetchProductByName } from "../api/client";
+// The mockData import is GONE -- allProducts no longer exists
 
 function ProductDetailPage() {
-  // Reads whatever is in the :name slot of the URL
   const { name } = useParams<{ name: string }>();
   const navigate = useNavigate();
 
-  // The URL segment is encoded (spaces become %20 etc), so decode before matching
+  // The name from the URL goes INTO the key, so /products/Croissant and
+  // /products/Iced%20Coffee get one cache entry each instead of sharing one.
   const decodedName = name !== undefined ? decodeURIComponent(name) : "";
-  const product = allProducts.find((p) => p.name === decodedName);
+  const { data, isPending, isError, error } = useQuery<ApiProduct>({
+    queryKey: ["products", decodedName],
+    queryFn: () => fetchProductByName(decodedName),
+    enabled: name !== undefined, // do not run without a name
+  });
 
-  // The URL is user input -- they can type anything. Handle that.
-  if (product === undefined) {
+  if (isPending) {
+    return (
+      <div className="animate-pulse p-6 text-gray-500">
+        Loading product...
+      </div>
+    );
+  }
+
+  // A bad name makes fetchProductByName throw, and the throw lands here
+  if (isError) {
     return (
       <div className="rounded-lg bg-red-50 p-4 text-red-700">
-        No product found with name "{decodedName}".
+        {error.message}
       </div>
     );
   }
@@ -24,10 +39,10 @@ function ProductDetailPage() {
   return (
     <div>
       <h2 className="mb-4 text-2xl font-bold text-gray-900 dark:text-white">
-        {product.name}
+        {data.name}
       </h2>
       <div className="max-w-sm">
-        <ProductCard product={product} />
+        <ProductCard product={data} />
       </div>
       <button
         onClick={() => navigate("/products")}

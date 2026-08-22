@@ -1,0 +1,52 @@
+{
+  "products": [
+    {
+      "id": "1",
+      "name": "Iced Coffee",
+      "price": 120,
+      "category": "Beverage"
+    },
+    {
+      "id": "2",
+      "name": "Croissant",
+      "price": 95,
+      "category": "Pastry"
+    },
+    {
+      "id": "3",
+      "name": "Matcha Latte",
+      "price": 150,
+      "category": "Beverage"
+    },
+    {
+      "id": "4",
+      "name": "Ham & Cheese Sandwich",
+      "price": 135,
+      "category": "Food"
+    }
+  ],
+  "preorders": [
+    {
+      "id": "1",
+      "customerId": 1,
+      "productName": "Iced Coffee",
+      "status": "Preparing",
+      "orderedAt": "2026-08-01T09:00:00.000Z"
+    },
+    {
+      "id": "2",
+      "customerId": 1,
+      "productName": "Croissant",
+      "status": "Ready",
+      "orderedAt": "2026-07-18T09:00:00.000Z"
+    },
+    {
+      "customerId": 1,
+      "productName": "Iced Coffee",
+      "status": "Pending",
+      "orderedAt": "2026-08-21T09:01:50.704Z",
+      "id": "ICy3gwGE6Fg"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

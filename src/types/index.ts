@@ -102,3 +102,21 @@ export const enum Role {
   Staff = "staff",
   Admin = "admin",
 }
+
+// ===== GT3 PART 2 -- THE TYPES THE API ACTUALLY RETURNS =====
+// JSON has no Date, and json-server writes ids as strings. So what the
+// API hands back is NOT the exact Product / PreOrder shape declared above.
+
+// Product never had an id field at all -- the API adds one, so this is
+// an intersection (&), not an Omit.
+export type ApiProduct = Product & { id: string };
+
+// PreOrder already declares id: number and orderedAt: Date -- both need
+// replacing, so this uses Omit the same way Session 1's Submission would.
+export type ApiPreOrder = Omit<PreOrder, "id" | "orderedAt"> & {
+  id: string;
+  orderedAt: string;
+};
+
+// What we SEND when creating a pre-order. No id yet -- the server makes one.
+export type NewPreOrder = Omit<ApiPreOrder, "id">;
