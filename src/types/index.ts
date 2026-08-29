@@ -16,9 +16,12 @@ export interface PreOrder {
 id: number;
 customerId: number;
 productName: string;
+quantity: number;
+pickupTime: string;
 status: string;
 orderedAt: Date;
 }
+
 // ===== TYPE ALIASES =====
 export type ID = number | string;
 export type Coordinate = {
@@ -54,6 +57,8 @@ latestOrder: {
   id: 1,
   customerId: 1,
   productName: "Iced Coffee",
+  quantity: 1,
+  pickupTime: "2026-08-22T15:00",
   status: "Preparing",
   orderedAt: new Date(),
 },
