@@ -2,7 +2,6 @@
 import { NavLink, Outlet } from "react-router";
 import useAuthStore from "../store/authStore";
 import useUiStore from "../store/uiStore";
-// The useToggle import is GONE -- Layout does not own dark mode any more
 
 function Layout() {
   const isDarkMode = useUiStore((state) => state.isDarkMode);
@@ -19,11 +18,9 @@ function Layout() {
 
   return (
     <div className={isDarkMode ? "dark" : ""}>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        <nav className="flex flex-wrap items-center gap-2 border-b border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-          <span className="mr-4 font-bold text-gray-900 dark:text-white">
-            Lordwig Pre-Order Platform
-          </span>
+      <div className="min-h-screen bg-background text-foreground">
+        <nav className="flex flex-wrap items-center gap-2 border-b border-border bg-white p-4 dark:bg-gray-800">
+          <span className="mr-4 font-bold">Pre-Order Platform</span>
 
           <NavLink to="/" end className={linkClass}>
             Dashboard
@@ -36,9 +33,14 @@ function Layout() {
           </NavLink>
 
           {userName === null ? (
-            <NavLink to="/login" className={linkClass}>
-              Login
-            </NavLink>
+            <>
+              <NavLink to="/login" className={linkClass}>
+                Login
+              </NavLink>
+              <NavLink to="/register" className={linkClass}>
+                Register
+              </NavLink>
+            </>
           ) : (
             <button
               onClick={logout}

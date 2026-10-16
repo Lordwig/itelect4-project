@@ -5,7 +5,9 @@ import { persist } from "zustand/middleware";
 interface AuthState {
   token: string | null;
   userName: string | null;
-  login: (name: string) => void;
+  // WAS login(name), which invented a fake token on the spot. The real
+  // token now comes from the backend, so the store just holds what it is given.
+  setSession: (token: string, userName: string) => void;
   logout: () => void;
 }
 
@@ -14,15 +16,15 @@ const useAuthStore = create<AuthState>()(
     (set) => ({
       token: null,
       userName: null,
-      login: (name) => set({ token: `demo-token-${name}`, userName: name }),
+      setSession: (token, userName) => set({ token, userName }),
       logout: () => set({ token: null, userName: null }),
     }),
     {
-      name: "itelect4-auth", // the localStorage key it writes to
+      name: "itelect4-auth",
       partialize: (state) => ({
         token: state.token,
         userName: state.userName,
-      }), // save ONLY these two fields
+      }),
     }
   )
 );

@@ -108,20 +108,37 @@ export const enum Role {
   Admin = "admin",
 }
 
-// ===== GT3 PART 2 -- THE TYPES THE API ACTUALLY RETURNS =====
-// JSON has no Date, and json-server writes ids as strings. So what the
-// API hands back is NOT the exact Product / PreOrder shape declared above.
+// ===== GT4 PART 2 -- THE TYPES THE BACKEND ACTUALLY RETURNS =====
+// MongoDB writes ids as 24-character strings and JSON turns every Date
+// into a string, so what the backend sends is NOT the Product / PreOrder /
+// Customer shape declared above. Each type below is DERIVED from its
+// interface, so the interface stays the single source of truth.
 
-// Product never had an id field at all -- the API adds one, so this is
-// an intersection (&), not an Omit.
+// Product never had an id field -- the backend adds one, so this is an
+// intersection (&), not an Omit. Unchanged since GT3.
 export type ApiProduct = Product & { id: string };
 
-// PreOrder already declares id: number and orderedAt: Date -- both need
-// replacing, so this uses Omit the same way Session 1's Submission would.
-export type ApiPreOrder = Omit<PreOrder, "id" | "orderedAt"> & {
+// Three fields change type: id and customerId become strings, and
+// orderedAt becomes the string JSON turned the Date into.
+export type ApiPreOrder = Omit<PreOrder, "id" | "customerId" | "orderedAt"> & {
   id: string;
+  customerId: string;
   orderedAt: string;
 };
 
-// What we SEND when creating a pre-order. No id yet -- the server makes one.
-export type NewPreOrder = Omit<ApiPreOrder, "id">;
+// What we SEND to create one. Only the three fields the person typed:
+// the server adds the id, the status, the date -- and the owner, which it
+// reads off the token instead of trusting the request.
+export type NewPreOrder = Pick<
+  PreOrder,
+  "productName" | "quantity" | "pickupTime"
+>;
+
+// A customer as the backend sends one back: no password, and a string id.
+export type ApiCustomer = Omit<Customer, "id"> & { id: string };
+
+// What POST /api/auth/login answers with.
+export interface AuthReply {
+  token: string;
+  customer: ApiCustomer;
+}

@@ -40,17 +40,12 @@ function OrdersPage() {
     },
   });
 
-  // handleSubmit only calls this after the schema passes.
   const onSubmit = (values: PreOrderFormValues): void => {
-    addPreOrder.mutate({
-      customerId: 1,
-      productName: values.productName,
-      quantity: values.quantity,
-      pickupTime: values.pickupTime,
-      status: "Pending",
-      orderedAt: new Date().toISOString(),
-    });
+    // values is exactly { productName, quantity, pickupTime }, which is
+    // exactly NewPreOrder. The server adds the rest, including the owner.
+    addPreOrder.mutate(values);
   };
+
 
   if (isPending) {
     return <div className="animate-pulse p-6 text-gray-500">Loading orders...</div>;
