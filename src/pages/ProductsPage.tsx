@@ -5,7 +5,7 @@ import type { ApiProduct } from "../types/index";
 import ProductCard from "../components/ProductCard";
 import usePrevious from "../hooks/usePrevious";
 import useUiStore from "../store/uiStore";
-import { fetchProducts } from "../api/client";
+import { fetchProducts, API_URL } from "../api/client";
 // useState, useEffect, useRef and mockData imports are GONE
 
 function ProductsPage() {
@@ -31,7 +31,7 @@ function ProductsPage() {
   if (isError) {
     return (
       <div className="rounded-lg bg-red-50 p-4 text-red-700">
-        {error.message} -- is json-server running on port 3001?
+        {error.message} -- could not reach {API_URL}
       </div>
     );
   }
