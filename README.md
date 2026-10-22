@@ -1,4 +1,8 @@
 # React + TypeScript + Vite
+## 🚀 Live Demo & Deployments
+
+* **Frontend App:** [https://itelect4-project-five.vercel.app](https://itelect4-project-five.vercel.app)
+* **Backend API:** [https://itelect4-backend-pi.vercel.app](https://itelect4-backend-pi.vercel.app)
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

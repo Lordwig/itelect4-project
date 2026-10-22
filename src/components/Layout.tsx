@@ -31,6 +31,9 @@ function Layout() {
           <NavLink to="/orders" className={linkClass}>
             My Orders
           </NavLink>
+                    <NavLink to="/assistant" className={linkClass}>
+            Order Helper
+          </NavLink>
 
           {userName === null ? (
             <>
