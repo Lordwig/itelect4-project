@@ -5,9 +5,11 @@ import type {
   NewPreOrder,
   ApiCustomer,
   AuthReply,
+  AiSuggestion,
 } from "../types/index";
 import type { LoginFormValues, RegisterFormValues } from "../schemas/authSchema";
 import useAuthStore from "../store/authStore";
+
 
 // Vite reads VITE_API_URL out of .env at build time and pastes the value in.
 // This is the ONLY place the backend's address appears in the whole app.
@@ -76,5 +78,14 @@ export function loginCustomer(body: LoginFormValues): Promise<AuthReply> {
   return request<AuthReply>("/api/auth/login", {
     method: "POST",
     body: JSON.stringify(body),
+  });
+}
+
+// ----- AI: private, rate limited, and the slowest call in the app -----
+// A suggestion takes a few seconds, because Gemini writes it while you wait.
+export function askAi(prompt: string): Promise<AiSuggestion> {
+  return request<AiSuggestion>("/api/ai", {
+    method: "POST",
+    body: JSON.stringify({ prompt }),
   });
 }

@@ -142,3 +142,14 @@ export interface AuthReply {
   token: string;
   customer: ApiCustomer;
 }
+
+// ===== GT5: what POST /api/ai answers with =====
+// Hand-written, and a COPY of the backend's Suggestion type: the schema
+// that generates it lives in itelect4-backend, in another repository, so
+// there is nothing here to infer it from. If the backend's schema
+// changes, this changes by hand.
+export interface AiSuggestion {
+  summary: string;
+  picks: string[];
+  match: "good" | "partial" | "none";
+}
