@@ -1,3 +1,5 @@
+[![CI](https://github.com/Lordwig/itelect4-project/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Lordwig/itelect4-project/actions/workflows/ci.yml)
+
 # React + TypeScript + Vite
 ## 🚀 Live Demo & Deployments
 

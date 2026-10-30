@@ -1,0 +1,32 @@
+name: CI
+
+# "On every push": any branch, including gt6-tests, so the pull request
+# already has a result before anybody merges it.
+on: push
+
+jobs:
+  test:
+    # A fresh Linux computer, rebuilt for every run. Nothing from your
+    # laptop is on it: no node_modules, no .env, no dist.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v7
+
+      - name: Install Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      # ci, not install: it installs exactly what package-lock.json says
+      # and fails if package.json and the lock file disagree.
+      - name: Install packages
+        run: npm ci
+
+      - name: Run the tests
+        run: npm test
+
+      # tsc -b && vite build: the type check, then the real build.
+      - name: Type check and build
+        run: npm run build
